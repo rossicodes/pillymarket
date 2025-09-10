@@ -8,7 +8,7 @@
  */
 
 import { Pool } from 'pg';
-import tradersData from '../../traders.json';
+import { TRADERS_DATA } from './traders-data';
 
 // Database connection
 const pool = new Pool({
@@ -66,7 +66,7 @@ async function migrateTraders() {
     
     let insertedCount = 0;
     
-    for (const trader of tradersData as TraderData[]) {
+    for (const trader of TRADERS_DATA as TraderData[]) {
       try {
         const result = await client.query(insertQuery, [
           trader.walletAddress,
