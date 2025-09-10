@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getActiveKOLAddresses } from '@/lib/kol-data';
+import type { Address } from 'gill';
 
 /**
  * Helius Webhook Handler
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest) {
       // Check if this transaction involves any of our monitored KOLs
       const involvedKOLs = transaction.accountData
         .map(account => account.account)
-        .filter(account => monitoredAddresses.includes(account));
+        .filter(account => monitoredAddresses.includes(account as Address));
 
       if (involvedKOLs.length === 0) {
         continue; // Skip transactions not involving our KOLs
