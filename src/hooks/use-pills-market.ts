@@ -139,7 +139,7 @@ export function useUserPortfolio() {
       setPillsBalance(demoBalance);
       
       const demoPortfolio: UserPortfolio = {
-        userAddress,
+        userAddress: userAddress as Address,
         pillsBalance: demoBalance,
         positions: [], // Would load from API
         totalValue: demoBalance,
@@ -225,7 +225,7 @@ export function useTrading() {
       
       // Execute buy order using market engine
       const result = await pillsMarketEngine.executeBuyOrder(
-        userAddress,
+        userAddress as Address,
         marketSummary.period.id,
         kolAddress,
         pillsAmount,
@@ -273,7 +273,7 @@ export function useTrading() {
     // In production, would check user's actual position from database
     // For demo, assume user has shares to sell
     const mockPosition: UserPosition = {
-      userAddress,
+      userAddress: userAddress as Address,
       periodId: marketSummary.period.id,
       kolAddress,
       sharesOwned: sharesAmount, // Demo: assume user has enough shares
@@ -290,7 +290,7 @@ export function useTrading() {
       
       // Execute sell order using market engine
       const result = await pillsMarketEngine.executeSellOrder(
-        userAddress,
+        userAddress as Address,
         marketSummary.period.id,
         kolAddress,
         sharesAmount,

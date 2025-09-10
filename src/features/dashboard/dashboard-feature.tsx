@@ -11,10 +11,6 @@ export default function DashboardFeature() {
 
   return (
     <div className="space-y-8 font-bold">
-      {/* Welcome Section */}
-      <div className="text-center space-y-4">
-        <h1 className="text-2xl ">How it works</h1>
-      </div>
       {/* How it Works */}
       <Card>
         <CardContent className="p-8 font-bold">

@@ -159,7 +159,7 @@ export function useLiveLeaderboard() {
       const newData: LiveLeaderboardData = {
         period: currentPeriod,
         entries,
-        totalVolume: kolLeaderboard.period.totalVolume || 0,
+        totalVolume: entries.reduce((sum, entry) => sum + entry.totalInvested, 0),
         activeTraders: entries.filter(e => e.totalTrades > 0).length,
         lastUpdated: Date.now(),
       };

@@ -241,7 +241,7 @@ export async function getLeaderboardData(periodId?: string) {
     WHERE k.is_active = true
     GROUP BY k.id, k.wallet_address, k.name, k.twitter_handle, k.image_url, k.telegram_handle
     ORDER BY total_pnl_sol DESC
-  `, [period.start_time, period.end_time]);
+  `, [(period as { start_time: string }).start_time, (period as { end_time: string }).end_time]);
   
   return {
     period,
