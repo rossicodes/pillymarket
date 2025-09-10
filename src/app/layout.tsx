@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import localFont from 'next/font/local'
 import { AppProviders } from '@/components/app-providers'
 import { AppLayout } from '@/components/app-layout'
 import React from 'react'
@@ -13,6 +14,28 @@ const links: { label: string; path: string }[] = [
   { label: 'Market', path: '/' },
   { label: 'Account', path: '/account' },
 ]
+
+const openSauce = localFont({
+  src: [
+    {
+      path: './fonts/OpenSauceOne-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/OpenSauceOne-Bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: './fonts/OpenSauceOne-ExtraBold.ttf',
+      weight: '800',
+      style: 'normal',
+    },
+  ],
+  display: 'swap',
+  variable: '--font-open-sauce',
+})
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

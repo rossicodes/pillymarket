@@ -47,7 +47,7 @@ export async function getClient(): Promise<PoolClient> {
 /**
  * Execute a query with automatic connection management
  */
-export async function query<T = any>(text: string, params?: any[]): Promise<T[]> {
+export async function query<T = unknown>(text: string, params?: unknown[]): Promise<T[]> {
   const client = await getClient();
   
   try {
@@ -128,7 +128,7 @@ export async function getOrCreateToken(mintAddress: string, tokenData?: {
 }) {
   return await transaction(async (client) => {
     // Try to get existing token
-    let result = await client.query(
+    const result = await client.query(
       'SELECT * FROM tokens WHERE mint_address = $1',
       [mintAddress]
     );

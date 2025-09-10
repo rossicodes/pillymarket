@@ -21,14 +21,14 @@ interface HeliusWebhookPayload {
     }>;
   }[];
   description: string;
-  events: any[];
+  events: unknown[];
   fee: number;
   feePayer: string;
   instructions: Array<{
     accounts: string[];
     data: string;
     programId: string;
-    innerInstructions: any[];
+    innerInstructions: unknown[];
   }>;
   nativeTransfers: Array<{
     fromUserAccount: string;
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       // Check if this transaction involves any of our monitored KOLs
       const involvedKOLs = transaction.accountData
         .map(account => account.account)
-        .filter(account => monitoredAddresses.includes(account as any));
+        .filter(account => monitoredAddresses.includes(account));
 
       if (involvedKOLs.length === 0) {
         continue; // Skip transactions not involving our KOLs

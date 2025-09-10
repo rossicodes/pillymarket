@@ -22,7 +22,7 @@ export default function DashboardFeature() {
             <div>
               <div className="text-2xl mb-3">1. Place a Bet</div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Fund your account with $PILLS then you're ready to bet. No bet limits and no fees.
+                Fund your account with $PILLS then you&apos;re ready to bet. No bet limits and no fees.
               </p>
             </div>
             <div>

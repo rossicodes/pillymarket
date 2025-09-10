@@ -182,5 +182,5 @@ export interface KOLBet {
 // Error types
 export interface KOLTrackingError extends Error {
   code: 'TOKEN_FETCH_ERROR' | 'TRADE_PARSE_ERROR' | 'WEBHOOK_ERROR' | 'DATABASE_ERROR';
-  context?: any;
+  context?: unknown;
 }
