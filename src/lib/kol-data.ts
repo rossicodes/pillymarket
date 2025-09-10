@@ -1,6 +1,6 @@
 import type { KOL } from './kol-types';
 import { type Address } from 'gill';
-import tradersData from '../../traders.json';
+import { TRADERS_DATA } from './traders-data';
 
 /**
  * Function to extract Twitter handle from full URL
@@ -16,7 +16,7 @@ function extractTwitterHandle(twitterUrl: string): string {
  * Convert traders.json data to KOL format
  * These are the 21 real KOL wallets we'll monitor via Helius webhooks
  */
-export const TRACKED_KOLS: KOL[] = tradersData.map((trader) => ({
+export const TRACKED_KOLS: KOL[] = TRADERS_DATA.map((trader) => ({
   address: trader.walletAddress as Address,
   name: trader.name,
   twitter: extractTwitterHandle(trader.twitterHandle),
