@@ -9,6 +9,7 @@ import { WalletDropdown } from '@/components/wallet-dropdown'
 import { ClusterDropdown } from '@/components/cluster-dropdown'
 import { useSolana } from '@/components/solana/use-solana'
 import { useUserPortfolio, useMarketFormatters } from '@/hooks/use-pills-market'
+import Image from 'next/image'
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()
@@ -22,10 +23,11 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
   }
 
   return (
-    <header className="relative z-50 px-4 py-2 bg-card/50">
+    <header className="relative z-50 px-4 py-2 bg-card/50 font-extrabold">
       <div className="mx-auto flex justify-between items-center">
-        <div className="flex items-baseline gap-4">
-          <Link className="text-xl hover:text-neutral-500 dark:hover:text-white" href="/">
+        <div className="flex items-center gap-4">
+          <Link className="flex items-center gap-1 text-xl hover:text-neutral-500 dark:hover:text-white" href="/">
+            <Image src="/pillylogo.png" alt="Pillymarket Logo" width={32} height={32} className="rounded-md" />
             <span>Pillymarket</span>
           </Link>
           <div className="hidden md:flex items-center">
@@ -50,7 +52,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
 
         <div className="hidden md:flex items-center gap-4">
           {account && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2 text-sm ">
               <Wallet className="w-4 h-4" />
               <span>{formatPILLS(pillsBalance)}</span>
             </div>
@@ -64,7 +66,7 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
           <div className="md:hidden fixed inset-x-0 top-[52px] bottom-0 bg-neutral-100/95 dark:bg-neutral-900/95 backdrop-blur-sm">
             <div className="flex flex-col p-4 gap-4 border-t dark:border-neutral-800">
               {account && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 justify-center">
+                <div className="flex items-center gap-2 text-sm justify-center">
                   <Wallet className="w-4 h-4" />
                   <span>{formatPILLS(pillsBalance)}</span>
                 </div>

@@ -33,9 +33,7 @@ export function PillsMarket() {
   if (error || !leaderboardData) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-600 dark:text-red-400 mb-4">
-          {error || 'Failed to load leaderboard data'}
-        </p>
+        <p className="text-red-600 dark:text-red-400 mb-4">{error || 'Failed to load leaderboard data'}</p>
         <Button onClick={refresh}>Try Again</Button>
       </div>
     )
@@ -50,35 +48,13 @@ export function PillsMarket() {
       {/* Market Header */}
       <div className="text-center space-y-3">
         <div className="text-center space-y-3">
-          <h1 className="text-3xl font-bold">KOL Trading Leaderboard</h1>
+          <h1 className="text-2xl font-bold">KOL Trading Leaderboard</h1>
           <p className="text-gray-600 dark:text-gray-400">Real-time rankings of top crypto KOLs trading on Pump.Fun</p>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
             <span>🔴 Live</span>
             <span>Last updated: {new Date(leaderboardData.lastUpdated).toLocaleTimeString()}</span>
           </div>
         </div>
-      </div>
-
-      {/* Market Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{formatPILLS(leaderboardData.totalVolume)}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Total Volume</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{leaderboardData.activeTraders}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">Active Traders</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{leaderboardData.entries.length}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">KOLs</div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Live Leaderboard */}
@@ -105,6 +81,28 @@ export function PillsMarket() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Market Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-xl font-bold">{formatPILLS(leaderboardData.totalVolume)}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Total Volume</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-xl font-bold">{leaderboardData.activeTraders}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Active Traders</div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <div className="text-xl font-bold">{leaderboardData.entries.length}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">KOLs</div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
@@ -135,7 +133,7 @@ function LiveLeaderboardRow({ entry }: { entry: LiveLeaderboardEntry }) {
   }
 
   return (
-    <div 
+    <div
       className={`
         flex items-center justify-between p-4 rounded-lg border bg-card 
         hover:bg-accent/50 transition-all duration-300
@@ -147,9 +145,7 @@ function LiveLeaderboardRow({ entry }: { entry: LiveLeaderboardEntry }) {
       <div className="flex items-center gap-4">
         {/* Rank with animation */}
         <div className="flex items-center gap-2 min-w-[60px]">
-          <div className="text-xl font-bold text-gray-600 dark:text-gray-400">
-            {getRankIcon(entry.rank)}
-          </div>
+          <div className="text-xl font-bold text-gray-600 dark:text-gray-400">{getRankIcon(entry.rank)}</div>
           {entry.isAnimating && getRankChangeIcon()}
         </div>
 
@@ -166,10 +162,15 @@ function LiveLeaderboardRow({ entry }: { entry: LiveLeaderboardEntry }) {
 
       <div className="flex items-center gap-6">
         {/* P&L with flash animation */}
-        <div className={`text-right transition-all duration-500 ${
-          isFlashing && entry.totalPnlSol > 0 ? 'text-green-500 scale-110' : 
-          isFlashing && entry.totalPnlSol < 0 ? 'text-red-500 scale-110' : ''
-        }`}>
+        <div
+          className={`text-right transition-all duration-500 ${
+            isFlashing && entry.totalPnlSol > 0
+              ? 'text-green-500 scale-110'
+              : isFlashing && entry.totalPnlSol < 0
+                ? 'text-red-500 scale-110'
+                : ''
+          }`}
+        >
           <div className={`font-mono font-bold text-lg ${getTradePerformanceColor(entry.totalPnlSol)}`}>
             {entry.totalPnlSol >= 0 ? '+' : ''}
             {formatSOL(entry.totalPnlSol)}
@@ -205,9 +206,7 @@ function LiveLeaderboardRow({ entry }: { entry: LiveLeaderboardEntry }) {
             <Button size="sm" className="relative">
               <DollarSign className="w-4 h-4 mr-1" />
               Trade
-              {entry.isAnimating && (
-                <Zap className="w-3 h-3 ml-1 text-yellow-400 animate-pulse" />
-              )}
+              {entry.isAnimating && <Zap className="w-3 h-3 ml-1 text-yellow-400 animate-pulse" />}
             </Button>
           </TradingModal>
           <Button variant="ghost" size="sm" asChild>
@@ -227,10 +226,10 @@ function TradingModal({ kolAddress, children }: { kolAddress: Address; children:
 
   const { buyShares, sellShares, getKOLPrice, calculateShares, canTrade } = useTrading()
   const { formatShares } = useMarketFormatters()
-  
+
   // Find KOL from leaderboard data or fallback to address lookup
   const { leaderboardData } = useLiveLeaderboard()
-  const kolEntry = leaderboardData?.entries.find(e => e.kol.address === kolAddress)
+  const kolEntry = leaderboardData?.entries.find((e) => e.kol.address === kolAddress)
   const kol = kolEntry?.kol
 
   if (!kol) return null
@@ -313,28 +312,23 @@ function TradingModal({ kolAddress, children }: { kolAddress: Address; children:
 
           {/* Amount Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">
-              {tradeType === 'buy' ? 'PILLS Amount' : 'Shares Amount'}
-            </label>
-            <Input 
-              type="number" 
-              placeholder="0.00" 
-              value={amount} 
+            <label className="text-sm font-medium">{tradeType === 'buy' ? 'PILLS Amount' : 'Shares Amount'}</label>
+            <Input
+              type="number"
+              placeholder="0.00"
+              value={amount}
               onChange={(e) => setAmount(e.target.value)}
               className="text-lg font-mono"
             />
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              {tradeType === 'buy' 
-                ? `≈ ${formatShares(sharesAmount)} shares` 
-                : `≈ $${pillsAmount.toFixed(2)} PILLS`
-              }
+              {tradeType === 'buy' ? `≈ ${formatShares(sharesAmount)} shares` : `≈ $${pillsAmount.toFixed(2)} PILLS`}
             </div>
           </div>
 
           {/* Trade Button */}
-          <Button 
-            onClick={handleTrade} 
-            disabled={!canTrade || !pillsAmount || isSubmitting} 
+          <Button
+            onClick={handleTrade}
+            disabled={!canTrade || !pillsAmount || isSubmitting}
             className="w-full text-lg py-6"
             size="lg"
           >

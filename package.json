@@ -11,6 +11,7 @@
     "db:init": "psql $DATABASE_URL -f scripts/init-db.sql",
     "db:migrate": "npx ts-node src/lib/migrate-traders.ts",
     "db:setup": "npm run db:init && npm run db:migrate",
+    "webhooks:setup": "npx ts-node scripts/setup-helius-webhooks.ts",
     "test:helius": "npx ts-node src/lib/test-helius.ts"
   },
   "description": "Next.js, Tailwind, gill (based on @solana/kit), Wallet UI",
