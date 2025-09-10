@@ -74,11 +74,14 @@ export async function POST() {
       dbDiagnostics = {
         connected: dbHealthy,
         activeKOLs: kols.length,
-        sampleKOLs: kols.slice(0, 3).map(kol => ({
-          name: kol.name,
-          wallet: kol.wallet_address?.slice(0, 8) + '...',
-          twitter: kol.twitter_handle,
-        })),
+        sampleKOLs: kols.slice(0, 3).map((kol: unknown) => {
+          const kolData = kol as { name: string; wallet_address?: string; twitter_handle: string };
+          return {
+            name: kolData.name,
+            wallet: kolData.wallet_address?.slice(0, 8) + '...',
+            twitter: kolData.twitter_handle,
+          };
+        }),
       };
     } catch (error) {
       dbDiagnostics = {
