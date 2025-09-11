@@ -57,16 +57,20 @@ export async function POST(request: NextRequest) {
     // Parse the webhook payload
     const payload: HeliusWebhookPayload[] = await request.json();
     
+    console.log(`🔔 Received webhook with ${payload.length} transaction(s)`);
+    
     // Verify the webhook is from Helius (in production, verify signature/auth)
     const heliusSecret = process.env.HELIUS_WEBHOOK_SECRET;
     const authHeader = request.headers.get('authorization');
     
     if (heliusSecret && authHeader !== `Bearer ${heliusSecret}`) {
+      console.log('❌ Unauthorized webhook request');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get the list of KOL addresses we're monitoring
     const monitoredAddresses = getActiveKOLAddresses();
+    console.log(`👥 Monitoring ${monitoredAddresses.length} KOL addresses`);
     
     // Process each transaction
     for (const transaction of payload) {
@@ -82,6 +86,7 @@ export async function POST(request: NextRequest) {
         .filter(account => monitoredAddresses.includes(account as Address));
 
       if (involvedKOLs.length === 0) {
+        console.log(`⏭️  Skipping transaction ${transaction.signature} - no monitored KOLs involved`);
         continue; // Skip transactions not involving our KOLs
       }
 
@@ -93,6 +98,7 @@ export async function POST(request: NextRequest) {
       );
 
       if (!isPumpFunTx) {
+        console.log(`⏭️  Skipping transaction ${transaction.signature} - not a Pump.Fun/Pump Swap transaction`);
         continue; // Only process Pump.Fun/Pump Swap transactions
       }
 
@@ -116,12 +122,15 @@ export async function POST(request: NextRequest) {
       });
 
       if (!isPumpAmmTransaction && !hasPumpFunBuySell) {
+        console.log(`⏭️  Skipping transaction ${transaction.signature} - not a buy/sell transaction (type: ${transactionType})`);
         continue; // Only process buy/sell transactions
       }
 
-      console.log(`Processing Pump.Fun transaction for KOL(s): ${involvedKOLs.join(', ')}`);
-      console.log(`Transaction signature: ${transaction.signature}`);
-      console.log(`Timestamp: ${new Date(transaction.timestamp * 1000).toISOString()}`);
+      console.log(`🎯 Processing Pump.Fun transaction for KOL(s): ${involvedKOLs.join(', ')}`);
+      console.log(`📝 Transaction signature: ${transaction.signature}`);
+      console.log(`⏰ Timestamp: ${new Date(transaction.timestamp * 1000).toISOString()}`);
+      console.log(`🏷️  Transaction type: ${transactionType || 'UNKNOWN'}`);
+      console.log(`📊 Program IDs involved: ${transaction.instructions.map(i => i.programId).join(', ')}`);
 
       // Extract token transfers for this transaction
       const tokenTransfers = transaction.tokenTransfers.filter(
@@ -146,6 +155,8 @@ export async function POST(request: NextRequest) {
       console.log('SOL transfers:', solTransfers);
     }
 
+    console.log(`✅ Webhook processed successfully - ${payload.length} transaction(s)`);
+    
     return NextResponse.json({ 
       success: true, 
       processed: payload.length,
