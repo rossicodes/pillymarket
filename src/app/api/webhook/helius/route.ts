@@ -85,15 +85,38 @@ export async function POST(request: NextRequest) {
         continue; // Skip transactions not involving our KOLs
       }
 
-      // Check if this is a Pump.Fun or PumpSwap transaction
+      // Check if this is a Pump.Fun or Pump Swap transaction
       const isPumpFunTx = transaction.instructions.some(
         instruction => 
-          instruction.programId === '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P' || // Pump.Fun program ID
-          instruction.programId === 'PumpS....' // PumpSwap program ID (placeholder)
+          instruction.programId === '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P' || // Pump.Fun launchpad program ID
+          instruction.programId === 'pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA'   // Pump Swap AMM program ID
       );
 
       if (!isPumpFunTx) {
-        continue; // Only process Pump.Fun/PumpSwap transactions
+        continue; // Only process Pump.Fun/Pump Swap transactions
+      }
+
+      // Check transaction type and identify buy/sell
+      const transactionType = transaction.type;
+      const isPumpAmmTransaction = transactionType === 'BUY' || transactionType === 'SELL';
+      
+      // For Pump.Fun launchpad, we need to check instruction data for buy/sell
+      const hasPumpFunBuySell = transaction.instructions.some(instruction => {
+        if (instruction.programId === '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P') {
+          // Check if instruction data matches buy (discriminator: [102, 6, 61, 18, 1, 218, 235, 234])
+          // or sell (discriminator: [51, 230, 133, 164, 1, 127, 131, 173]) from the IDL
+          const data = instruction.data;
+          if (data) {
+            const buyDiscriminator = '660630120100dadabea'; // hex representation of buy discriminator
+            const sellDiscriminator = '33e685a4017f83ad'; // hex representation of sell discriminator
+            return data.startsWith(buyDiscriminator) || data.startsWith(sellDiscriminator);
+          }
+        }
+        return false;
+      });
+
+      if (!isPumpAmmTransaction && !hasPumpFunBuySell) {
+        continue; // Only process buy/sell transactions
       }
 
       console.log(`Processing Pump.Fun transaction for KOL(s): ${involvedKOLs.join(', ')}`);
