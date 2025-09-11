@@ -48,8 +48,8 @@ export function PillsMarket() {
       {/* Market Header */}
       <div className="text-center space-y-3">
         <div className="text-center space-y-3">
-          <h1 className="text-2xl font-bold">KOL Trading Leaderboard</h1>
-          <p className="text-gray-600 dark:text-gray-400">Real-time rankings of top crypto KOLs trading on Pump.Fun</p>
+          <h1 className="text-2xl font-bold">Realized PnL Leaderboard</h1>
+          <p className="text-gray-600 dark:text-gray-400">Real-time PnL rankings of KOLs trading on Pump.Fun</p>
           <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
             <span>🔴 Live</span>
             <span>Last updated: {new Date(leaderboardData.lastUpdated).toLocaleTimeString()}</span>

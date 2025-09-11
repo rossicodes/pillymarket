@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 }
 
 const links: { label: string; path: string }[] = [
-  { label: 'Market', path: '/' },
   { label: 'Account', path: '/account' },
+  { label: 'How It Works', path: '/how-it-works' },
 ]
 
 const openSauce = localFont({

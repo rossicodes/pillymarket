@@ -1,5 +1,5 @@
 'use client'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -9,17 +9,31 @@ import { WalletDropdown } from '@/components/wallet-dropdown'
 import { ClusterDropdown } from '@/components/cluster-dropdown'
 import { useSolana } from '@/components/solana/use-solana'
 import { useUserPortfolio, useMarketFormatters } from '@/hooks/use-pills-market'
+import { useHowItWorks } from '@/contexts/how-it-works-context'
 import Image from 'next/image'
 
 export function AppHeader({ links = [] }: { links: { label: string; path: string }[] }) {
   const pathname = usePathname()
+  const router = useRouter()
   const [showMenu, setShowMenu] = useState(false)
   const { account } = useSolana()
   const { pillsBalance } = useUserPortfolio()
   const { formatPILLS } = useMarketFormatters()
+  const { toggleHowItWorks } = useHowItWorks()
 
   function isActive(path: string) {
     return path === '/' ? pathname === '/' : pathname.startsWith(path)
+  }
+
+  function handleLinkClick(path: string, label: string) {
+    if (label === 'How It Works') {
+      // Navigate to home page first, then toggle
+      if (pathname !== '/') {
+        router.push('/')
+      }
+      toggleHowItWorks()
+      setShowMenu(false)
+    }
   }
 
   return (
@@ -34,12 +48,21 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
             <ul className="flex gap-4 flex-nowrap items-center">
               {links.map(({ label, path }) => (
                 <li key={path}>
-                  <Link
-                    className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
-                    href={path}
-                  >
-                    {label}
-                  </Link>
+                  {label === 'How It Works' ? (
+                    <button
+                      className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
+                      onClick={() => handleLinkClick(path, label)}
+                    >
+                      {label}
+                    </button>
+                  ) : (
+                    <Link
+                      className={`hover:text-neutral-500 dark:hover:text-white ${isActive(path) ? 'text-neutral-500 dark:text-white' : ''}`}
+                      href={path}
+                    >
+                      {label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -79,13 +102,22 @@ export function AppHeader({ links = [] }: { links: { label: string; path: string
               <ul className="flex flex-col gap-4">
                 {links.map(({ label, path }) => (
                   <li key={path}>
-                    <Link
-                      className={`block text-lg py-2  ${isActive(path) ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
-                      href={path}
-                      onClick={() => setShowMenu(false)}
-                    >
-                      {label}
-                    </Link>
+                    {label === 'How It Works' ? (
+                      <button
+                        className={`block text-lg py-2 text-left ${isActive(path) ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+                        onClick={() => handleLinkClick(path, label)}
+                      >
+                        {label}
+                      </button>
+                    ) : (
+                      <Link
+                        className={`block text-lg py-2  ${isActive(path) ? 'text-foreground' : 'text-muted-foreground'} hover:text-foreground`}
+                        href={path}
+                        onClick={() => setShowMenu(false)}
+                      >
+                        {label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
