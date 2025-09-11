@@ -144,15 +144,26 @@ export async function POST(request: NextRequest) {
                     involvedKOLs.includes(transfer.toUserAccount)
       );
 
-      // TODO: Process this transaction data
-      // 1. Parse using solana-dex-parser to get buy/sell info
-      // 2. Store in database with trade aggregation logic
-      // 3. Update real-time leaderboard
-      // 4. Fetch token metadata if needed
-
-      // For now, just log the transaction details
-      console.log('Token transfers:', tokenTransfers);
-      console.log('SOL transfers:', solTransfers);
+      // Process and save transaction data to database
+      try {
+        const { processWebhookTransaction } = await import('@/lib/webhook-db-processor');
+        
+        await processWebhookTransaction(
+          transaction.signature,
+          transaction.timestamp,
+          transaction.slot,
+          involvedKOLs,
+          tokenTransfers,
+          solTransfers,
+          transactionType
+        );
+        
+        console.log(`✅ Successfully saved transaction ${transaction.signature} to database`);
+        
+      } catch (dbError) {
+        console.error(`❌ Failed to save transaction ${transaction.signature} to database:`, dbError);
+        // Continue processing other transactions even if one fails
+      }
     }
 
     console.log(`✅ Webhook processed successfully - ${payload.length} transaction(s)`);

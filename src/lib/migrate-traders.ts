@@ -7,8 +7,12 @@
  * 2. Run: npx ts-node src/lib/migrate-traders.ts
  */
 
+import { config } from 'dotenv';
 import { Pool } from 'pg';
 import { TRADERS_DATA } from './traders-data';
+
+// Load environment variables from .env file
+config();
 
 // Database connection
 const pool = new Pool({
