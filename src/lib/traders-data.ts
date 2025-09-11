@@ -171,4 +171,11 @@ export const TRADERS_DATA: TraderData[] = [
     twitterHandle: 'https://x.com/alohquant',
     telegramHandle: true,
   },
+  {
+    name: 'Yenni',
+    walletAddress: '5B52w1ZW9tuwUduueP5J7HXz5AcGfruGoX6YoAudvyxG',
+    imageUrl: '5B52w1ZW9tuwUduueP5J7HXz5AcGfruGoX6YoAudvyxG.png',
+    twitterHandle: 'https://x.com/Yennii56',
+    telegramHandle: true,
+  },
 ]
